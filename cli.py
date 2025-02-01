@@ -78,7 +78,7 @@ def uninstall():
 # Function to display the version of the tool
 def version():
     cprint(f"OpenHubble CLI {CLI_VERSION}", "cyan", attrs=["bold"])
-    
+
 # Function to get ping of Agent
 def ping_agent(host, port):
     print(host, port)
