@@ -80,8 +80,9 @@ def version():
     cprint(f"OpenHubble CLI {CLI_VERSION}", "cyan", attrs=["bold"])
 
 # Function to get ping of Agent
-def ping_agent(host="127.0.0.1", port="9703"):
-    url = f"http://{host}:{port}/api/ping"
+def ping_agent(host="127.0.0.1", port="9703", protocol="http"):
+    url = f"{protocol}://{host}:{port}/api/ping"
+    
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -94,8 +95,9 @@ def ping_agent(host="127.0.0.1", port="9703"):
         cprint(f"Error contacting agent: {e}", "red")
 
 # Function to get a metric from Agent
-def get_metric(host="127.0.0.1", port="9703", metric="hostname"):
-    url = f"http://{host}:{port}/api/get?metric={metric}"
+def get_metric(host="127.0.0.1", port="9703", metric="hostname", protocol="http"):
+    url = f"{protocol}://{host}:{port}/api/get?metric={metric}"
+
     try:
         response = requests.get(url)
         response.raise_for_status()
@@ -129,13 +131,17 @@ def main():
     ping_parser = subparsers.add_parser("ping", help="Get ping of Agent")
     ping_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
     ping_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
-    
+    ping_parser.add_argument("--http", action="store_true", help="Use http as protocol")
+    ping_parser.add_argument("--https", action="store_true", help="Use https as protocol")
+
     # Define subcommand for get
     get_parser = subparsers.add_parser("get", help="Get a metric from Agent")
     get_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
     get_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
     get_parser.add_argument("--metric", type=str, default="hostname", help="Metric from Agent")
-
+    get_parser.add_argument("--http", action="store_true", help="Use http as protocol")
+    get_parser.add_argument("--https", action="store_true", help="Use https as protocol")
+    
     # Parse the arguments passed to the script
     args = parser.parse_args()
 
@@ -149,9 +155,19 @@ def main():
     elif args.command == "uninstall":
         uninstall()
     elif args.command == "ping":
-        ping_agent(args.host, args.port)
+        if args.http == True and args.https == True:
+            print("You can not use both 2 protocols. Use --http or --https")
+            return
+
+        protocol = "http" if args.http == True else "https"        
+        ping_agent(args.host, args.port, protocol)
     elif args.command == "get":
-        get_metric(args.host, args.port, args.metric)
+        if args.http == True and args.https == True:
+            print("You can not use both 2 protocols. Use --http or --https")
+            return
+
+        protocol = "http" if args.http == True else "https"        
+        get_metric(args.host, args.port, args.metric, protocol)
     else:
         parser.print_help()
 
