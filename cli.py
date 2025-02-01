@@ -4,6 +4,7 @@
 
 import argparse  # Argument parsing
 import subprocess  # Executing system commands like systemctl
+import requests # Making HTTP requests
 
 from art import text2art  # To generate ASCII art
 from termcolor import cprint  # Colored terminal printing
