@@ -80,12 +80,32 @@ def version():
     cprint(f"OpenHubble CLI {CLI_VERSION}", "cyan", attrs=["bold"])
 
 # Function to get ping of Agent
-def ping_agent(host, port):
-    print(host, port)
-    
+def ping_agent(host="127.0.0.1", port="9703"):
+    url = f"http://{host}:{port}/api/ping"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        if data.get("message") == "pong":
+            cprint("Agent is running.", "green")
+        else:
+            cprint("Unexpected response from agent.", "yellow")
+    except requests.RequestException as e:
+        cprint(f"Error contacting agent: {e}", "red")
+
 # Function to get a metric from Agent
-def get_metric(host, port, metric):
-    print(host, port, metric)
+def get_metric(host="127.0.0.1", port="9703", metric="hostname"):
+    url = f"http://{host}:{port}/api/get?metric={metric}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        if "metric" in data:
+            cprint(f"Metric value: {data['metric']}", "green")
+        else:
+            cprint("Unexpected response from agent.", "yellow")
+    except requests.RequestException as e:
+        cprint(f"Error contacting agent: {e}", "red")
 
 # Custom argument parser to enhance the help output
 class CustomArgumentParser(argparse.ArgumentParser):
@@ -107,14 +127,14 @@ def main():
     
     # Define subcommand for ping
     ping_parser = subparsers.add_parser("ping", help="Get ping of Agent")
-    ping_parser.add_argument("--host", type=str, required=True, help="Host of Agent")
-    ping_parser.add_argument("--port", type=str, required=True, help="Port of Agent")
+    ping_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
+    ping_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
     
     # Define subcommand for get
-    ping_parser = subparsers.add_parser("get", help="Get a metric from Agent")
-    ping_parser.add_argument("--host", type=str, required=True, help="Host of Agent")
-    ping_parser.add_argument("--port", type=str, required=True, help="Port of Agent")
-    ping_parser.add_argument("--metric", type=str, required=True, help="Metric from Agent")
+    get_parser = subparsers.add_parser("get", help="Get a metric from Agent")
+    get_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
+    get_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
+    get_parser.add_argument("--metric", type=str, default="hostname", help="Metric from Agent")
 
     # Parse the arguments passed to the script
     args = parser.parse_args()
