@@ -11,7 +11,7 @@ from termcolor import cprint  # Colored terminal printing
 from rich.console import Console  # Enhanced terminal output
 from rich_gradient import Gradient  # Gradient effects in text output
 
-CLI_VERSION = "1.0.0"
+CLI_VERSION = "1.2.0"
 
 # Initialize the rich console for pretty output
 console = Console()
