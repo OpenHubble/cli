@@ -66,18 +66,26 @@ This allows you to use the CLI without installing dependencies on your system.
 
 You can use commands to **ping** the agent, **get** a specific metric from the agent, **update**, or **uninstall**. Let's begin.
 
+> #### Note!
+>
+> If you are running your **Agent** over **https** just add `--https` at the end or anywhere of your command!
+>
+> Remember that choosing protocol is available on both `get` and `ping` commands.
+>
+> By default, the choosed protocol is **http**.
+
 ### Ping Agent
 
 To check if the agent is running, use:
 
 ```bash
-openhubble-cli ping --host <host> --port <port>
+openhubble-cli ping --host <host> --port <port> --<protocol>
 ```
 
 Example:
 
 ```bash
-openhubble-cli ping --host llm.example.com --port 9703
+openhubble-cli ping --host llm.example.com --port 9703 --http
 ```
 
 If the agent is running, the response will be:
@@ -104,7 +112,7 @@ openhubble-cli get --host <host> --port <port> --metric <metric>
 Example:
 
 ```bash
-openhubble-cli get --host llm.example.com --port 7788 --metric hostname
+openhubble-cli get --host llm.example.com --port 7788 --metric hostname --https
 ```
 
 This might return:
