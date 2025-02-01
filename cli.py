@@ -44,37 +44,37 @@ def print_art():
     )
 
 
-# Function to update the service by running the update.sh script
+# Function to update the tool by running the update.sh script
 def update():
-    cprint("Updating the service...", "blue")
+    cprint("Updating the tool...", "blue")
     
     # Confirmation prompt
-    confirmation = input("Are you sure you want to update the service? (yes/no): ").strip().lower()
+    confirmation = input("Are you sure you want to update the tool? (yes/no): ").strip().lower()
     
     if confirmation in ["yes", "y"]:
         update_script = "/opt/openhubble-cli/scripts/update.sh"
         
         subprocess.run(["sudo", update_script])  # Run the update script
-        cprint("Service updated successfully.", "green")
+        cprint("Tool updated successfully.", "green")
     else:
         cprint("Updating aborted.", "yellow")
 
-# Function to uninstall the service with a user confirmation prompt
+# Function to uninstall the tool with a user confirmation prompt
 def uninstall():
-    cprint("Uninstalling the service...", "red")
+    cprint("Uninstalling the tool...", "red")
     
     # Confirmation prompt
-    confirmation = input("Are you sure you want to uninstall the service? (yes/no): ").strip().lower()
+    confirmation = input("Are you sure you want to uninstall the tool? (yes/no): ").strip().lower()
     
     if confirmation in ["yes", "y"]:
         uninstall_script = "/opt/openhubble-cli/scripts/uninstall.sh"
         
         subprocess.run(["sudo", uninstall_script])  # Run the uninstall script
-        cprint("Service uninstalled successfully.", "green")
+        cprint("Tool uninstalled successfully.", "green")
     else:
         cprint("Uninstallation aborted.", "yellow")
 
-# Function to display the version of the service
+# Function to display the version of the tool
 def version():
     cprint(f"OpenHubble CLI {CLI_VERSION}", "cyan", attrs=["bold"])
     
@@ -99,8 +99,8 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # Define subcommands and their corresponding help descriptions
-    subparsers.add_parser("update", help="Update the service")
-    subparsers.add_parser("uninstall", help="Uninstall the service")
+    subparsers.add_parser("update", help="Update the tool")
+    subparsers.add_parser("uninstall", help="Uninstall the tool")
     subparsers.add_parser("help", help="Show help information")
     subparsers.add_parser("version", help="Show the version of the tool")
     
