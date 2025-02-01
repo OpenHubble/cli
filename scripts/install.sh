@@ -42,10 +42,10 @@ echo "Installing modules..."
 
 # Make cli.py executable
 echo "Making cli.py executable..."
-chmod +x /opt/openhubble-cli/wrapper.sh
+chmod +x /opt/openhubble-cli/cli/wrapper.sh
 
 # Create a symbolic link to make openhubble-cli command available
 echo "Creating symbolic link for openhubble-cli command..."
-ln -sf /opt/openhubble-cli/wrapper.sh /usr/local/bin/openhubble-cli
+ln -sf /opt/openhubble-cli/cli/wrapper.sh /usr/local/bin/openhubble-cli
 
 echo "OpenHubble CLI has been installed successfully."
