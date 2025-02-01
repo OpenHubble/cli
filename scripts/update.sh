@@ -9,7 +9,7 @@ fi
 set -e
 
 # Change directory to source directory
-cd /opt/openhubble-agent || {
+cd /opt/openhubble-cli || {
   echo "Source directory not found."
   exit 1
 }
@@ -23,25 +23,18 @@ git pull origin main || {
 
 # Updating Python dependencies
 echo "Updating Python dependencies..."
-/opt/openhubble-agent/.venv/bin/python3 -m pip install --no-cache-dir -r requirements.txt || {
+/opt/openhubble-cli/.venv/bin/python3 -m pip install --no-cache-dir -r requirements.txt || {
   echo "Failed to update Python dependencies."
   exit 1
 }
 
 # Clearing Python cache
 echo "Clearing Python cache..."
-find /opt/openhubble-agent -name "*.pyc" -delete
-find /opt/openhubble-agent -name "__pycache__" -delete
+find /opt/openhubble-cli -name "*.pyc" -delete
+find /opt/openhubble-cli -name "__pycache__" -delete
 
 # Reload Daemon
 echo "Reloading services..."
 systemctl daemon-reload
 
-# Restart service
-echo "Restarting the service..."
-systemctl restart openhubble-agent.service || {
-  echo "Failed to restart the service."
-  exit 1
-}
-
-echo "OpenHubble Agent has been updated successfully."
+echo "OpenHubble CLI has been updated successfully."
