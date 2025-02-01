@@ -36,7 +36,70 @@ Now the tool must be appire!
 
 ## Available Commands
 
-You can commands to **ping** the agent, **get** specefic metric from agent, **update**, or **uninstall**. Let's begin.
+You can use commands to **ping** the agent, **get** a specific metric from the agent, **update**, or **uninstall**. Let's begin.
+
+### Ping Agent
+
+To check if the agent is running, use:
+
+```bash
+openhubble-cli ping --host <host> --port <port>
+```
+
+Example:
+
+```bash
+openhubble-cli ping --host llm.example.com --port 9703
+```
+
+If the agent is running, the response will be:
+
+```bash
+Agent is running.
+```
+
+If there is an issue, an error message will be displayed.
+
+> **Default values:**
+> - `host`: `127.0.0.1`
+> - `port`: `9703`
+
+### Get Metric
+
+To retrieve a specific metric from the agent, use:
+
+```bash
+openhubble-cli get --host <host> --port <port> --metric <metric>
+```
+
+Example:
+
+```bash
+openhubble-cli get --host llm.example.com --port 7788 --metric hostname
+```
+
+This might return:
+
+```bash
+SRV_LLM_PROD
+```
+
+Another example:
+
+```bash
+openhubble-cli get --metric agent.version
+```
+
+This could return:
+
+```bash
+1.2.0
+```
+
+> **Default values:**
+> - `host`: `127.0.0.1`
+> - `port`: `9703`
+> - `metric`: `hostname`
 
 ### Show Version
 
