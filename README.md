@@ -34,6 +34,34 @@ Now the tool must be appire!
 
 ---
 
+## Running the CLI with Docker
+
+You can also run the OpenHubble CLI without installing it by using **Docker**:
+
+### 1. Pull the Docker Image
+
+```bash
+docker pull openhubble/openhubble-cli
+```
+
+### 2. Run Commands with Docker
+
+You can execute the CLI commands directly using Docker:
+
+```bash
+docker run --rm openhubble/openhubble-cli ping --host llm.example.com --port 9703
+```
+
+Another example:
+
+```bash
+docker run --rm openhubble/openhubble-cli get --host llm.example.com --port 7788 --metric hostname
+```
+
+This allows you to use the CLI without installing dependencies on your system.
+
+---
+
 ## Available Commands
 
 You can use commands to **ping** the agent, **get** a specific metric from the agent, **update**, or **uninstall**. Let's begin.
@@ -61,6 +89,7 @@ Agent is running.
 If there is an issue, an error message will be displayed.
 
 > **Default values:**
+>
 > - `host`: `127.0.0.1`
 > - `port`: `9703`
 
@@ -97,6 +126,7 @@ This could return:
 ```
 
 > **Default values:**
+>
 > - `host`: `127.0.0.1`
 > - `port`: `9703`
 > - `metric`: `hostname`
@@ -149,6 +179,69 @@ sudo openhubble-cli uninstall
 This will:
 
 - Remove directories, and configuration files.
+
+---
+
+# OpenHubble CLI
+
+**Command-line interface** (CLI) tool built with **Python** for interacting with the **Agent**, enabling quick testing and data retrieval. Features include querying metrics, testing configurations, and debugging.. Includes installation, update, and uninstallation guides.
+
+## Installing the CLI
+
+To install the **OpenHubble CLI**, follow these steps:
+
+### 1. Download and Run the Installation Script
+
+Use `curl` to fetch the installation script and run it with **root** privileges:
+
+```bash
+curl -s https://get.openhubble.com/cli | sudo bash
+```
+
+This script will:
+
+- Update your system's packages.
+- Install required dependencies (`git`, `python3`, `python3-venv`, and `python3-pip`).
+- Clone the **OpenHubble CLI** repository.
+- Set up the required directories and configurations.
+- Create a Python virtual environment and install the necessary Python modules.
+
+### 2. Verify Installation
+
+To confirm the CLI is installed, use:
+
+```bash
+openhubble-cli
+```
+
+Now the tool must be available!
+
+---
+
+## Building the Docker Image (For Development)
+
+If you want to build the **Docker image** yourself, follow these steps:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/OpenHubble/cli.git
+cd cli
+```
+
+### 2. Build the Docker Image
+
+```bash
+docker build -t oh-cli:1 .
+```
+
+### 3. Run the CLI Using the Built Image
+
+```bash
+docker run --rm oh-cli:1 ping --host 127.0.0.1 --port 9703
+```
+
+This is useful for local development and testing.
 
 ---
 
