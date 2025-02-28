@@ -11,7 +11,7 @@ from termcolor import cprint  # Colored terminal printing
 from rich.console import Console  # Enhanced terminal output
 from rich_gradient import Gradient  # Gradient effects in text output
 
-CLI_VERSION = "1.2.0"
+import config.config as config  # Configuration of cli
 
 # Initialize the rich console for pretty output
 console = Console()
@@ -77,7 +77,7 @@ def uninstall():
 
 # Function to display the version of the tool
 def version():
-    cprint(f"OpenHubble CLI {CLI_VERSION}", "cyan", attrs=["bold"])
+    cprint(f"OpenHubble CLI {config.CLI_VERSION}", "cyan", attrs=["bold"])
 
 # Function to get ping of Agent
 def ping_agent(host="127.0.0.1", port="9703", protocol="http"):
