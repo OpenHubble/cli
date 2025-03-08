@@ -6,46 +6,44 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Update packages
+# Install dependencies
 apt update -y
+apt install -y python3 python3-venv python3-pip curl tar jq
 
-# Install some requirements
-apt install -y git python3 python3-venv python3-pip
+# Set install directory
+INSTALL_DIR="/opt/openhubble-cli"
 
-# Create directories
-echo "Creating directories..."
-mkdir -p /opt/openhubble-cli # App source
+# Get the latest release tag from GitHub
+LATEST_VERSION=$(curl -s "https://api.github.com/repos/OpenHubble/cli/releases/latest" | jq -r '.tag_name')
 
-# Change directory to source directory
-cd /opt/openhubble-cli
-
-# Clone the project using git
-echo "Cloning the project..."
-git clone https://github.com/OpenHubble/cli . || {
-  echo "Git clone failed."
+if [ -z "$LATEST_VERSION" ] || [ "$LATEST_VERSION" == "null" ]; then
+  echo "Failed to get latest version."
   exit 1
-}
+fi
 
-# Create a hidden virtual environment
+TARBALL_URL="https://api.github.com/repos/OpenHubble/cli/tarball/$LATEST_VERSION"
+
+echo "Installing OpenHubble CLI version $LATEST_VERSION..."
+
+# Create directory if not exists
+mkdir -p "$INSTALL_DIR"
+
+# Download and extract the latest version
+curl -L "$TARBALL_URL" -o /tmp/openhubble-cli.tar.gz
+tar -xzf /tmp/openhubble-cli.tar.gz --strip-components=1 -C "$INSTALL_DIR"
+
+# Create virtual environment
 echo "Creating virtual environment..."
-python3 -m venv .venv || {
-  echo "Failed to create virtual environment."
-  exit 1
-}
+python3 -m venv "$INSTALL_DIR/.venv"
 
-# Install app modules
-echo "Installing modules..."
-/opt/openhubble-cli/.venv/bin/python3 -m pip install --no-cache-dir -r requirements.txt || {
-  echo "Failed to install Python modules."
-  exit 1
-}
+# Install Python dependencies
+echo "Installing dependencies..."
+"$INSTALL_DIR/.venv/bin/python3" -m pip install --no-cache-dir -r "$INSTALL_DIR/requirements.txt"
 
-# Make cli.py executable
-echo "Making cli.py executable..."
-chmod +x /opt/openhubble-cli/cli/wrapper.sh
+# Make CLI executable
+chmod +x "$INSTALL_DIR/cli/wrapper.sh"
 
-# Create a symbolic link to make openhubble-cli command available
-echo "Creating symbolic link for openhubble-cli command..."
-ln -sf /opt/openhubble-cli/cli/wrapper.sh /usr/local/bin/openhubble-cli
+# Create symbolic link
+ln -sf "$INSTALL_DIR/cli/wrapper.sh" /usr/local/bin/openhubble-cli
 
-echo "OpenHubble CLI has been installed successfully."
+echo "OpenHubble CLI ($LATEST_VERSION) installed successfully."
