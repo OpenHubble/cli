@@ -6,14 +6,25 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Remove directories
-echo "Removing cli files..."
-rm -rf /opt/openhubble-cli
-rm -rf /etc/openhubble-cli
-rm -rf /var/log/openhubble-cli
+set -e  # Stop script on error
 
-# Remove the symbolic link for openhubble-cli
-echo "Removing symbolic link..."
-rm -f /usr/local/bin/openhubble-cli
+INSTALL_DIR="/opt/openhubble-cli"
+
+# Check if the CLI is installed
+if [ -d "$INSTALL_DIR" ]; then
+  echo "Removing OpenHubble CLI files..."
+  rm -rf "$INSTALL_DIR"
+else
+  echo "OpenHubble CLI is not installed."
+fi
+
+# Remove config and logs (if they exist)
+rm -rf /etc/openhubble-cli /var/log/openhubble-cli
+
+# Remove the symbolic link
+if [ -L "/usr/local/bin/openhubble-cli" ]; then
+  echo "Removing symbolic link..."
+  rm -f /usr/local/bin/openhubble-cli
+fi
 
 echo "OpenHubble CLI has been uninstalled successfully."
