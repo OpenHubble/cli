@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Improved
 
-- removal of Git-based updates
+- Removal of Git-based updates
 
 ## [1.2.0] - 2025-02-01
 
