@@ -41,7 +41,7 @@ You can also run the OpenHubble CLI without installing it by using **Docker**:
 ### 1. Pull the Docker Image
 
 ```bash
-docker pull openhubble/openhubble-cli
+docker pull openhubble/cli
 ```
 
 ### 2. Run Commands with Docker
@@ -49,13 +49,13 @@ docker pull openhubble/openhubble-cli
 You can execute the CLI commands directly using Docker:
 
 ```bash
-docker run --rm openhubble/openhubble-cli ping --host llm.example.com --port 9703
+docker run --rm openhubble/cli ping --host llm.example.com --port 9703
 ```
 
 Another example:
 
 ```bash
-docker run --rm openhubble/openhubble-cli get --host llm.example.com --port 7788 --metric hostname
+docker run --rm openhubble/cli get --host llm.example.com --port 7788 --metric hostname
 ```
 
 This allows you to use the CLI without installing dependencies on your system.
