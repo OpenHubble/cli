@@ -49,13 +49,13 @@ docker pull openhubble/cli
 You can execute the CLI commands directly using Docker:
 
 ```bash
-docker run --rm openhubble/cli ping --host llm.example.com --port 9703
+docker run --rm openhubble/cli ping --host llm.example.com --port 9703 --key the-apikey-in-agent-config
 ```
 
 Another example:
 
 ```bash
-docker run --rm openhubble/cli get --host llm.example.com --port 7788 --metric hostname
+docker run --rm openhubble/cli get --host llm.example.com --port 7788 --key the-apikey-in-agent-config --metric hostname
 ```
 
 This allows you to use the CLI without installing dependencies on your system.
@@ -79,13 +79,13 @@ You can use commands to **ping** the agent, **get** a specific metric from the a
 To check if the agent is running, use:
 
 ```bash
-openhubble-cli ping --host <host> --port <port> --<protocol>
+openhubble-cli ping --host <host> --port <port> --key <api-key> --<protocol>
 ```
 
 Example:
 
 ```bash
-openhubble-cli ping --host llm.example.com --port 9703 --http
+openhubble-cli ping --host llm.example.com --port 9703 --key the-apikey-in-agent-config --http
 ```
 
 If the agent is running, the response will be:
@@ -106,13 +106,13 @@ If there is an issue, an error message will be displayed.
 To retrieve a specific metric from the agent, use:
 
 ```bash
-openhubble-cli get --host <host> --port <port> --metric <metric>
+openhubble-cli get --host <host> --port <port> --key <api-key> --metric <metric>
 ```
 
 Example:
 
 ```bash
-openhubble-cli get --host llm.example.com --port 7788 --metric hostname --https
+openhubble-cli get --host llm.example.com --port 7788 --key the-apikey-in-agent-config --metric hostname --https
 ```
 
 This might return:
