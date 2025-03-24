@@ -8,16 +8,16 @@ USERNAME="openhubble"
 REPO_NAME="cli"
 IMAGE_NAME="${USERNAME}/${REPO_NAME}"
 
-echo "🚀 Building and pushing ${IMAGE_NAME}:${CI_COMMIT_TAG} and latest"
+echo "🚀 Building and pushing ${IMAGE_NAME}:${CI_COMMIT_TAG} and latest for multiple architectures"
 
-# Build the Docker image
-docker build --platform linux/amd64 -t ${IMAGE_NAME}:${CI_COMMIT_TAG} .
+# Enable Buildx if not already enabled
+docker buildx create --use || true
 
-# Push the versioned image
-docker push ${IMAGE_NAME}:${CI_COMMIT_TAG}
+# Build and push the multi-architecture image
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -t ${IMAGE_NAME}:${CI_COMMIT_TAG} \
+  -t ${IMAGE_NAME}:latest \
+  --push .
 
-# Tag as latest and push
-docker tag ${IMAGE_NAME}:${CI_COMMIT_TAG} ${IMAGE_NAME}:latest
-docker push ${IMAGE_NAME}:latest
-
-echo "✅ Docker image pushed successfully!"
+echo "✅ Docker images pushed successfully!"
