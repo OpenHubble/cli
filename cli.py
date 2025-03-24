@@ -95,12 +95,14 @@ def version():
     cprint(f"OpenHubble CLI {config.CLI_VERSION}", "cyan", attrs=["bold"])
 
 # Function to get ping of Agent
-def ping_agent(host="127.0.0.1", port="9703", protocol="http"):
+def ping_agent(host="127.0.0.1", port="9703", key="apikey", protocol="http"):
     url = f"{protocol}://{host}:{port}/api/ping"
+    headers = {"X-API-KEY": key}
     
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
+        
         data = response.json()
         if data.get("message") == "pong":
             cprint("Agent is running.", "green")
@@ -110,12 +112,14 @@ def ping_agent(host="127.0.0.1", port="9703", protocol="http"):
         cprint(f"Error contacting agent: {e}", "red")
 
 # Function to get a metric from Agent
-def get_metric(host="127.0.0.1", port="9703", metric="hostname", protocol="http"):
+def get_metric(host="127.0.0.1", port="9703", key="apikey", metric="hostname", protocol="http"):
     url = f"{protocol}://{host}:{port}/api/get?metric={metric}"
+    headers = {"X-API-KEY": key}
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, headers=headers)
         response.raise_for_status()
+        
         data = response.json()
         if "metric" in data:
             cprint(f"Metric value: {data['metric']}", "green")
@@ -203,6 +207,7 @@ def main():
     ping_parser = subparsers.add_parser("ping", help="Get ping of Agent")
     ping_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
     ping_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
+    ping_parser.add_argument("--key", type=str, default="apikey", help="API Key of Agent")
     ping_parser.add_argument("--http", action="store_true", help="Use http as protocol")
     ping_parser.add_argument("--https", action="store_true", help="Use https as protocol")
 
@@ -210,6 +215,7 @@ def main():
     get_parser = subparsers.add_parser("get", help="Get a metric from Agent")
     get_parser.add_argument("--host", type=str, default="127.0.0.1", help="Host of Agent")
     get_parser.add_argument("--port", type=str, default="9703", help="Port of Agent")
+    get_parser.add_argument("--key", type=str, default="apikey", help="API Key of Agent")
     get_parser.add_argument("--metric", type=str, default="hostname", help="Metric from Agent")
     get_parser.add_argument("--http", action="store_true", help="Use http as protocol")
     get_parser.add_argument("--https", action="store_true", help="Use https as protocol")
@@ -232,14 +238,14 @@ def main():
             return
 
         protocol = "http" if args.http == True else "https"        
-        ping_agent(args.host, args.port, protocol)
+        ping_agent(args.host, args.port, args.key, protocol)
     elif args.command == "get":
         if args.http == True and args.https == True:
             print("You can not use both 2 protocols. Use --http or --https")
             return
 
         protocol = "http" if args.http == True else "https"        
-        get_metric(args.host, args.port, args.metric, protocol)
+        get_metric(args.host, args.port, args.key, args.metric, protocol)
     else:
         parser.print_help()
 
